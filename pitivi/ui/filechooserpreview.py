@@ -353,6 +353,8 @@ class PreviewWidget(gtk.VBox, Loggable):
         if mess.type == gst.MESSAGE_ELEMENT:
             if mess.structure.get_name() == 'prepare-xwindow-id':
                 sink = mess.src
+                if isinstance(sink, gst.Bin):
+                    sink = sink.get_by_interface(gst.interfaces.XOverlay)
                 sink.set_property('force-aspect-ratio', True)
                 sink.set_property("handle-expose", True)
                 gtk.gdk.threads_enter()
